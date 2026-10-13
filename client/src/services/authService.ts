@@ -1,5 +1,9 @@
 import { api } from "./api";
-import type { AuthResponse, LoginCredentials } from "@/types/auth";
+import type {
+  AuthResponse,
+  LoginCredentials,
+  RegisterCredentials,
+} from "@/types/auth";
 
 export const authService = {
   login(credentials: LoginCredentials) {
@@ -8,14 +12,20 @@ export const authService = {
       body: JSON.stringify(credentials),
     });
   },
+  register(credentials: RegisterCredentials) {
+    return api<AuthResponse>("/auth/register", {
+      method: "POST",
+      body: JSON.stringify(credentials),
+    });
+  },
   logout() {
     return api<AuthResponse>("/auth/logout", {
-        method: "POST",
+      method: "POST",
     });
   },
   getCurrentUser() {
     return api<AuthResponse>("/auth/me", {
-        method: "GET"
+      method: "GET",
     });
   },
 };
