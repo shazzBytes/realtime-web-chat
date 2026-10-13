@@ -1,33 +1,26 @@
-import http from 'http';
-// import { Server } from 'socket.io';
-// import { createApp } from './app.js';
-import { connectDB } from './config/database.js';
-// import { env } from './config/env.js';
-
-async function bootstrap() {
+// const { Server } = require('socket.io');
+const createApp = require('./app.js');
+const connectDB = require('./config/database.js');
+require('dotenv').config()
+async function main() {
   await connectDB();
 
   const app = createApp();
-  const httpServer = http.createServer(app);
 
-  const io = new Server(httpServer, {
-    cors: { origin: env.clientUrl, credentials: true },
-  });
+  // Socket auth middleware + event handlers will be registered here in Slice 3
+  // io.on('connection', (socket) => {
+  //   console.log('🔌 Socket connected:', socket.id);
+  //   socket.on('disconnect', () => {
+  //     console.log('🔌 Socket disconnected:', socket.id);
+  //   });
+  // });
 
-  // 👉 Socket auth middleware + event handlers will be registered here in Slice 3
-//   io.on('connection', (socket) => {
-//     console.log('🔌 Socket connected:', socket.id);
-//     socket.on('disconnect', () => {
-//       console.log('🔌 Socket disconnected:', socket.id);
-//     });
-//   });
-
-  httpServer.listen(env.port, () => {
-    console.log(`🚀 Server running on http://localhost:${env.port}`);
+  app.listen(process.env.PORT, () => {
+    console.log(`🚀 Server running on http://localhost:${process.env.PORT}`);
   });
 }
 
-bootstrap().catch((err) => {
-  console.error('Failed to start server:', err);
+main().catch((error) => {
+  console.error('Failed to start server:', error);
   process.exit(1);
 });
