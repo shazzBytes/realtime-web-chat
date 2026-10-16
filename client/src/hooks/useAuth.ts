@@ -38,7 +38,7 @@ export function useAuth() {
     }
   }
   async function register(credentials: RegisterCredentials) {
-    setIsLoading: true;
+    setIsLoading(true);
     setError(null);
 
     try {
@@ -63,7 +63,7 @@ export function useAuth() {
       await authService.logout();
     } finally {
       clearAuth();
-      router.replace("login");
+      router.replace("/login");
     }
   }
 

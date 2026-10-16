@@ -1,48 +1,41 @@
-"use client"
-import { cn } from "cn"
+"use client";
+import { cn } from "cn";
 
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
+} from "@/components/ui/card";
 import {
   Field,
   FieldDescription,
   FieldGroup,
   FieldLabel,
-} from "@/components/ui/field"
+} from "@/components/ui/field";
 
-import { Input } from "@/components/ui/input"
-import { useState } from "react"
-import { useAuth } from "@/hooks/useAuth"
+import { Input } from "@/components/ui/input";
+import { useState } from "react";
+import { useAuth } from "@/hooks/useAuth";
 
 export function LoginForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const {
-    login,
-    isLoading,
-    error
-  } = useAuth();
+  const { login, isLoading, error } = useAuth();
 
-  async function handleSubmit(
-    event: React.SubmitEvent<HTMLFormElement>
-  ) {
+  async function handleSubmit(event: React.SubmitEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    await login({
+    const successmessagae = await login({
       email: email.trim().toLowerCase(),
       password,
-    })
+    });
   }
 
   return (
@@ -63,8 +56,10 @@ export function LoginForm({
                   id="email"
                   type="email"
                   placeholder="m@example.com"
-                  required  
-                  onChange={(e) => {setEmail(e.target.value)}}
+                  required
+                  onChange={(e) => {
+                    setEmail(e.target.value);
+                  }}
                 />
               </Field>
               <Field>
@@ -77,7 +72,14 @@ export function LoginForm({
                     Forgot your password?
                   </a>
                 </div>
-                <Input id="password" type="password" required onChange={(e) => {setPassword(e.target.value)}} />
+                <Input
+                  id="password"
+                  type="password"
+                  required
+                  onChange={(e) => {
+                    setPassword(e.target.value);
+                  }}
+                />
               </Field>
               <Field>
                 {error && (
@@ -100,5 +102,5 @@ export function LoginForm({
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }

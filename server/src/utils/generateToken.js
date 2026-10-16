@@ -1,12 +1,9 @@
-const jwt = require('jsonwebtoken')
+const jwt = require("jsonwebtoken");
+const crypto = require("node:crypto");
 
-function generateToken(payload) {
-    return jwt.sign(
-        payload,
-        process.env.JWT_SECRET_KEY,
-        {
-            expiresIn: '1h'
-        }
-    );
+function generateToken(payload, options = {}) {
+  const { secret = process.env.JWT_ACCESS_SECRET, expiresIn = "1h" } = options;
+  return jwt.sign(payload, secret, { expiresIn });
 }
+
 module.exports = generateToken;
