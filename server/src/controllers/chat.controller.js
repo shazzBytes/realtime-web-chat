@@ -10,6 +10,25 @@ async function listConversations(req, res, next) {
   }
 }
 
+async function createConversation(req, res, next) {
+  try {
+    const { recipientId } = req.body;
+    const result = await chatService.createConversation(
+      req.user._id,
+      recipientId,
+    );
+    return res.status(result.created ? 201 : 200).json({
+      message: result.created
+        ? "Direct Conversation created successfully."
+        : "Direct Conversation already exists.",
+      conversation: result.conversation,
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+
 module.exports = {
   listConversations,
+  createConversation,
 };

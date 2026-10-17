@@ -1,7 +1,12 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { MessageCircle, Settings, Users, UserCircle } from "lucide-react";
+import {
+  MessageCircle,
+  Settings,
+  Users,
+  UserCircle,
+} from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -12,13 +17,15 @@ const navigation = [
   { href: "/settings", label: "Settings", icon: Settings },
 ];
 
+type SidebarProps = {
+  onNavigate?: () => void;
+  className?: string;
+};
+
 export default function Sidebar({
   onNavigate,
   className,
-}: {
-  onNavigate?: () => void;
-  className?: string;
-}) {
+}: SidebarProps) {
   const pathname = usePathname();
 
   const isActive = (href: string) =>
@@ -78,7 +85,10 @@ export default function Sidebar({
               )}
             >
               <Icon
-                className={cn("size-5", isActive(href) && "stroke-[2.5]")}
+                className={cn(
+                  "size-5",
+                  isActive(href) && "stroke-[2.5]",
+                )}
               />
               <span>{label}</span>
             </Link>

@@ -10,6 +10,10 @@ export function useChat() {
   return useQuery({
     queryKey: ["conversations", user?.id],
     queryFn: async () => {
+      if (!user?.id) {
+        throw new Error("user is not authenticated")
+      }
+
       const response = await chatService.listConversations();
       return response.conversations.map((conversation) =>
         toChat(conversation, user!.id),

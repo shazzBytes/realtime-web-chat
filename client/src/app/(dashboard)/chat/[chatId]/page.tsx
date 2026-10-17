@@ -1,5 +1,4 @@
 import { Suspense } from "react";
-import ChatPageContent from "@/components/chat/ChatPageContent";
 
 export default function ChatPage() {
   return (
@@ -10,7 +9,6 @@ export default function ChatPage() {
         </div>
       }
     >
-      <ChatPageContent />
     </Suspense>
   );
 }

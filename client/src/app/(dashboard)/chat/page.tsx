@@ -1,16 +1,30 @@
-import { Suspense } from "react";
-import ChatPageContent from "@/components/chat/ChatPageContent";
+"use client";
+
+import { useChat } from "@/hooks/useChat";
 
 export default function ChatPage() {
+  const {
+    data: chatData = [],
+    isPending,
+    isError,
+  } = useChat();
+
+  if (isPending) {
+    return <p className="p-4 text-sm text-muted-foreground">
+      Loading conversations...
+    </p>;
+  }
+
+  if (isError) {
+    return <p className="p-4 text-sm text-destructive">
+      Unable to load conversations.
+    </p>;
+  }
+
   return (
-    <Suspense
-      fallback={
-        <div className="flex h-full min-h-[calc(100vh-4rem)] items-center justify-center">
-          <p className="text-sm text-muted-foreground">Loading messages…</p>
-        </div>
-      }
-    >
-      <ChatPageContent />
-    </Suspense>
+    <div>
+      {/* Pass chatData to your actual chat layout/sidebar */}
+      <p>{chatData.length} conversations</p>
+    </div>
   );
 }
