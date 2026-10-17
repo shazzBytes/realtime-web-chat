@@ -8,14 +8,11 @@ import { Suspense } from "react";
 function DashboardLayoutContent({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
-  const pathname = usePathname();
-  const isChatRoute = pathname === "/chat" || pathname.startsWith("/chat/");
-
   return (
     <div className="min-h-svh bg-muted/30">
       <Navbar />
       <div className="mx-auto flex min-h-[calc(100svh-4rem)] max-w-[1600px]">
-        {!isChatRoute && <Sidebar />}
+        <Sidebar />
         <main className="min-w-0 flex-1">{children}</main>
       </div>
     </div>

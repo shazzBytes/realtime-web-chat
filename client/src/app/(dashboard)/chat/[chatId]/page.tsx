@@ -1,30 +1,16 @@
-"use client";
+import { Suspense } from "react";
+import ChatPageContent from "@/components/chat/ChatPageContent";
 
-import ChatWindow from "@/components/chat/ChatWindow";
-import MessageInput from "@/components/chat/MessageInput";
-import { useChatRoute } from "@/components/chat/ChatRouteContext";
-import { Separator } from "@/components/ui/separator";
-
-export default function ChatConversationPage() {
-  const { selectedChat, setIsOpenChat, sendMessage } = useChatRoute();
-
+export default function ChatPage() {
   return (
-    <div className="flex h-full min-h-0 flex-col">
-      <div className="min-h-0 flex-1 overflow-hidden">
-        <ChatWindow
-          selectedChat={selectedChat}
-          onClickMobile={() => setIsOpenChat(true)}
-        />
-      </div>
-      {selectedChat && (
-        <div className="shrink-0">
-          <Separator />
-          <MessageInput
-            selectedChat={selectedChat}
-            onSendMessage={sendMessage}
-          />
+    <Suspense
+      fallback={
+        <div className="flex h-full min-h-[calc(100vh-4rem)] items-center justify-center">
+          <p className="text-sm text-muted-foreground">Loading messages…</p>
         </div>
-      )}
-    </div>
+      }
+    >
+      <ChatPageContent />
+    </Suspense>
   );
 }

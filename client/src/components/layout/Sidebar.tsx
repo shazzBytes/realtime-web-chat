@@ -1,7 +1,7 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { LayoutDashboard, MessageCircle, Settings, Users, UserCircle } from "lucide-react";
+import { MessageCircle, Settings, Users, UserCircle } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -21,57 +21,70 @@ export default function Sidebar({
 }) {
   const pathname = usePathname();
 
+  const isActive = (href: string) =>
+    href === "/chat"
+      ? pathname === "/chat" || pathname.startsWith("/chat/")
+      : pathname === href || pathname.startsWith(`${href}/`);
+
   return (
-    <aside className={cn("hidden w-64 shrink-0 border-e bg-background md:block", className)}>
-      <div className="flex h-full flex-col p-4">
-        <div className="mb-6 rounded-2xl bg-primary/5 p-4">
-          <div className="mb-2 flex size-10 items-center justify-center rounded-xl bg-primary text-primary-foreground">
-            <LayoutDashboard className="size-5" />
-          </div>
-          <p className="text-sm font-semibold">Your workspace</p>
-          <p className="mt-1 text-xs leading-relaxed text-muted-foreground">
-            Keep conversations, groups, and your profile in one place.
-          </p>
-        </div>
-
-        <nav aria-label="Dashboard navigation" className="space-y-1">
-          {navigation.map(({ href, label, icon: Icon }) => {
-            const isActive = pathname === href || pathname.startsWith(`${href}/`);
-
-            return (
+    <>
+      {/* Desktop sidebar */}
+      <aside
+        className={cn(
+          "hidden w-64 shrink-0 border-e bg-background md:block",
+          className,
+        )}
+      >
+        <div className="flex h-full flex-col p-4 py-8">
+          <nav aria-label="Dashboard navigation" className="space-y-1">
+            {navigation.map(({ href, label, icon: Icon }) => (
               <Link
                 key={href}
-                aria-current={isActive ? "page" : undefined}
+                href={href}
+                onClick={onNavigate}
+                aria-current={isActive(href) ? "page" : undefined}
                 className={cn(
                   "flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors",
-                  isActive
+                  isActive(href)
                     ? "bg-primary text-primary-foreground shadow-sm"
                     : "text-muted-foreground hover:bg-muted hover:text-foreground",
                 )}
-                href={href}
-                onClick={onNavigate}
               >
                 <Icon className="size-4" />
                 {label}
               </Link>
-            );
-          })}
-        </nav>
-
-        <div className="mt-auto rounded-2xl border bg-card p-4">
-          <p className="text-sm font-medium">Need a quick start?</p>
-          <p className="mt-1 text-xs leading-relaxed text-muted-foreground">
-            Open Messages to pick up where you left off.
-          </p>
-          <Link
-            className="mt-3 inline-flex text-xs font-semibold text-primary hover:underline"
-            href="/chat"
-            onClick={onNavigate}
-          >
-            Go to messages →
-          </Link>
+            ))}
+          </nav>
         </div>
-      </div>
-    </aside>
+      </aside>
+
+      {/* Mobile bottom navigation */}
+      <nav
+        aria-label="Mobile navigation"
+        className="fixed inset-x-0 bottom-0 z-50 border-t bg-background/95 pb-[env(safe-area-inset-bottom)] backdrop-blur sm:hidden"
+      >
+        <div className="mx-auto grid h-16 max-w-lg grid-cols-4">
+          {navigation.map(({ href, label, icon: Icon }) => (
+            <Link
+              key={href}
+              href={href}
+              onClick={onNavigate}
+              aria-current={isActive(href) ? "page" : undefined}
+              className={cn(
+                "flex flex-col items-center justify-center gap-1 text-xs transition-colors",
+                isActive(href)
+                  ? "font-medium text-primary"
+                  : "text-muted-foreground hover:text-foreground",
+              )}
+            >
+              <Icon
+                className={cn("size-5", isActive(href) && "stroke-[2.5]")}
+              />
+              <span>{label}</span>
+            </Link>
+          ))}
+        </div>
+      </nav>
+    </>
   );
 }
